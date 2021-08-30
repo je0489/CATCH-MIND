@@ -3,7 +3,7 @@
 It's REALTIME DRAWING GRAM built with socketIO, gulp and nodeJS
 
 ## TODO
--  [✓] server
+-  [x] server
 -  [ ] pug
 -  [ ] static
 -  [ ] socketIO
