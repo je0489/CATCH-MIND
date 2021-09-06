@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "dev:server",
+			"problemMatcher": [],
+			"label": "npm: dev:server",
+			"detail": "nodemon --exec babel-node src/server",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
+}
