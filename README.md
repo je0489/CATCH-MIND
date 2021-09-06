@@ -7,5 +7,5 @@ It's REALTIME DRAWING GRAM built with socketIO, gulp and nodeJS
 - [x] server
 - [x] pug
 - [x] static
-- [**x**] ESLint
+- [x] ESLint
 - [x] socketIO
