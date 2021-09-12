@@ -11,7 +11,7 @@ const app = express();
 app.set("view engine", "pug");
 app.set("views", join(__dirname, "views"));
 app.use(logger("dev"));
-app.use(express.static(join(__dirname, "js")));
+app.use(express.static(join(__dirname, "client")));
 app.get("/", (req, res) => res.render("home"));
 
 const listening = () => console.log(`http://localhost:${PORT}`);
