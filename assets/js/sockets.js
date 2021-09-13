@@ -1,5 +1,6 @@
 import {
-    handleNewUser
+    handleNewUser,
+    hadnleDisconneted
 } from './notification';
 
 let socket = null;
@@ -14,4 +15,5 @@ export const initSockets = aSocket => {
     } = window;
     updateSocket(aSocket);
     aSocket.on(events.newUser, handleNewUser);
+    aSocket.on(events.disconnected, hadnleDisconneted);
 }
