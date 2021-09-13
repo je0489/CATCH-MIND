@@ -16,6 +16,14 @@ const sockeetController = (socket) => {
             nickname: socket.nickname
         });
     });
+    socket.on(events.senndMsg, ({
+        message
+    }) => {
+        broadcast(events.newMsg, {
+            message,
+            nickname: socket.nickname
+        });
+    });
 }
 
 export default sockeetController;
