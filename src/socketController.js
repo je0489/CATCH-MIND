@@ -1,21 +1,41 @@
 import events from './events';
 
-const sockeetController = (socket) => {
+let sockets = [];
+
+/**
+ * 
+ * @param {*} socket 
+ * @param {socket.io} io connected 상태인 모든 socket에게 event emit(본인 socket 포함)
+ */
+const sockeetController = (socket, io) => {
     const broadcast = (event, data) => socket.broadcast.emit(event, data);
+    const superBroadcast = (event, data) => io.broadcast.emit(event, data);
+    const sendPlayerUpdate = () =>
+        superBroadcast(events.playerUpdate, {
+            sockets
+        });
 
     socket.on(events.setNickname, ({
         nickname
     }) => {
         socket.nickname = nickname;
+        sockets.push({
+            id: socket.id,
+            points: 0,
+            nickname
+        });
         broadcast(events.newUser, {
             nickname
         });
+        sendPlayerUpdate();
     });
-    socket.on(events.disconnect, () =>
+    socket.on(events.disconnect, () => {
+        sockets = sockets.filter(s => s.id !== socket.id);
         broadcast(events.disconnected, {
             nickname: socket.nickname
-        })
-    );
+        });
+        sendPlayerUpdate();
+    });
     socket.on(events.senndMsg, ({
             message
         }) =>

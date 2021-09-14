@@ -10,6 +10,9 @@ import {
     handleStrokedPath,
     handleFilled
 } from './paint';
+import {
+    handlePlayerUpdate
+} from './player';
 
 let socket = null;
 
@@ -23,7 +26,8 @@ export const initSockets = aSocket => {
             newMsg,
             beganPath,
             strokedPath,
-            filled
+            filled,
+            playerUpdate
         }
     } = window;
     socket = aSocket;
@@ -33,4 +37,5 @@ export const initSockets = aSocket => {
     socket.on(beganPath, handleBeganPath);
     socket.on(strokedPath, handleStrokedPath);
     socket.on(filled, handleFilled);
+    socket.on(playerUpdate, handlePlayerUpdate);
 }

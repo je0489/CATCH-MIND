@@ -23,4 +23,4 @@ const server = app.listen(PORT, listening());
 const io = socketIO(server);
 
 // 소켓 연결시 실행
-io.on("connection", socket => sockeetController(socket));
+io.on("connection", socket => sockeetController(socket, io));
