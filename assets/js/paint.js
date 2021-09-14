@@ -1,3 +1,7 @@
+import {
+    getSocket
+} from './sockets';
+
 const canvas = document.getElementById("jsCanvas");
 const ctx = canvas.getContext("2d");
 const colors = document.getElementsByClassName("jsColor");
@@ -21,6 +25,21 @@ let filling = false;
 const startPainting = () => painting = true;
 const stopPainting = () => painting = false;
 
+const beginPath = (x, y) => {
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+}
+
+const strokePath = (x, y, color = null) => {
+    const currentColor = ctx.strokeStyle;
+    if (color !== null)
+        ctx.strokeStyle = color;
+
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    ctx.strokeStyle = currentColor; // 기존색상으로 변경 
+}
+
 const onMouseMove = event => {
     const {
         events
@@ -28,18 +47,17 @@ const onMouseMove = event => {
     const x = event.offsetX,
         y = event.offsetY;
     if (!painting) {
-        ctx.beginPath();
-        ctx.moveTo(x, y);
+        beginPath(x, y);
         getSocket().emit(events.beginPath, {
             x,
             y
         });
     } else {
-        ctx.lineTo(x, y);
-        ctx.stroke();
+        strokePath(x, y);
         getSocket().emit(events.strokePath, {
             x,
-            y
+            y,
+            color: ctx.strokeStyle
         });
     }
 }
@@ -60,9 +78,26 @@ const handleModeClick = () => {
     }
 }
 
+const fill = (color = null) => {
+    console.log(color);
+    const currentColor = ctx.fillStyle;
+    if (color !== null)
+        ctx.fillStyle = color;
+    ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
+    ctx.fillStyle = currentColor; // 기존색상으로 변경 
+}
+
 const handleCanvasClick = () => {
-    if (filling)
-        ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+    const {
+        events
+    } = window;
+    if (filling) {
+        fill();
+        getSocket().emit(events.fill, {
+            color: ctx.fillStyle
+        });
+    }
 }
 
 const handleCM = event => event.preventDefault();
@@ -80,3 +115,16 @@ if (mode)
     mode.addEventListener("click", handleModeClick);
 
 Array.from(colors).forEach(color => color.addEventListener("click", handleColorClick));
+
+export const handleBeganPath = ({
+    x,
+    y
+}) => beginPath(x, y);
+export const handleStrokedPath = ({
+    x,
+    y,
+    color
+}) => strokePath(x, y, color);
+export const handleFilled = ({
+    color
+}) => fill(color);
