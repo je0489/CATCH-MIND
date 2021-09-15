@@ -1,8 +1,6 @@
 import {
-    enableCanvas,
-    disableCanvas,
-    showControls,
-    hideControls,
+    cantPaint,
+    canPaint,
     resetCanvas
 } from './paint';
 
@@ -31,20 +29,17 @@ const setNotifyWord = (msg = null) => {
 export const handleNotifyLeader = ({
     word
 }) => {
-    enableCanvas();
-    showControls();
+    canPaint();
     setNotifyWord(`You are the leader, word: ${word}`);
 };
 
 export const handleStartedGame = () => {
-    disableCanvas();
-    hideControls();
+    cantPaint();
     setNotifyWord();
 };
 
 export const handleEndedGame = () => {
-    disableCanvas();
-    hideControls();
-    setNotifyWord("GAME END");
+    cantPaint();
     resetCanvas();
+    setNotifyWord("GAME END");
 }
