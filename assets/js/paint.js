@@ -6,7 +6,7 @@ const canvas = document.getElementById("jsCanvas");
 const ctx = canvas.getContext("2d");
 const controls = document.getElementById("jsControls");
 const colors = controls.getElementsByClassName("jsColor");
-const mode = controls.querySelector(".jsMode");
+const mode = controls.querySelector("button");
 
 const INITIAL_COLOR = "#2c2c2c";
 const CANVAS_SIZE = 700;
