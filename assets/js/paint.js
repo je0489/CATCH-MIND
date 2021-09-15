@@ -102,10 +102,24 @@ const handleCanvasClick = () => {
 
 const handleCM = event => event.preventDefault();
 
-if (mode)
-    mode.addEventListener("click", handleModeClick);
+const disableCanvas = () => {
+    canvas.removeEventListener("mousemove", onMouseMove);
+    canvas.removeEventListener("mousedown", startPainting);
+    canvas.removeEventListener("mouseup", stopPainting);
+    canvas.removeEventListener("mouseleave", stopPainting);
+    canvas.removeEventListener("click", handleCanvasClick);
+}
 
-Array.from(colors).forEach(color => color.addEventListener("click", handleColorClick));
+const enableCanvas = () => {
+    canvas.addEventListener("mousemove", onMouseMove);
+    canvas.addEventListener("mousedown", startPainting);
+    canvas.addEventListener("mouseup", stopPainting);
+    canvas.addEventListener("mouseleave", stopPainting);
+    canvas.addEventListener("click", handleCanvasClick);
+}
+
+const hideControls = () => controls.style.display = "none";
+const showControls = () => controls.style.display = "flex";
 
 export const handleBeganPath = ({
     x,
@@ -120,28 +134,24 @@ export const handleFilled = ({
     color
 }) => fill(color);
 
-export const disableCanvas = () => {
-    canvas.removeEventListener("mousemove", onMouseMove);
-    canvas.removeEventListener("mousedown", startPainting);
-    canvas.removeEventListener("mouseup", stopPainting);
-    canvas.removeEventListener("mouseleave", stopPainting);
-    canvas.removeEventListener("click", handleCanvasClick);
+export const cantPaint = () => {
+    disableCanvas();
+    hideControls();
 }
 
-export const enableCanvas = () => {
-    canvas.addEventListener("mousemove", onMouseMove);
-    canvas.addEventListener("mousedown", startPainting);
-    canvas.addEventListener("mouseup", stopPainting);
-    canvas.addEventListener("mouseleave", stopPainting);
-    canvas.addEventListener("click", handleCanvasClick);
+export const canPaint = () => {
+    enableCanvas();
+    showControls();
 }
-
-export const hideControls = () => controls.style.opacity = 0;
-export const showControls = () => controls.style.opacity = 1;
 
 export const resetCanvas = () => fill("#FFF");
+
+if (mode)
+    mode.addEventListener("click", handleModeClick);
 
 if (canvas) {
     disableCanvas();
     canvas.addEventListener("contextmenu", handleCM);
 }
+
+Array.from(colors).forEach(color => color.addEventListener("click", handleColorClick));
