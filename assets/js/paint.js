@@ -4,8 +4,9 @@ import {
 
 const canvas = document.getElementById("jsCanvas");
 const ctx = canvas.getContext("2d");
-const colors = document.getElementsByClassName("jsColor");
-const mode = document.getElementById("jsMode");
+const controls = document.getElementById("jsControls");
+const colors = controls.getElementsByClassName("jsColor");
+const mode = controls.querySelector(".jsMode");
 
 const INITIAL_COLOR = "#2c2c2c";
 const CANVAS_SIZE = 700;
@@ -102,15 +103,6 @@ const handleCanvasClick = () => {
 
 const handleCM = event => event.preventDefault();
 
-if (canvas) {
-    canvas.addEventListener("mousemove", onMouseMove);
-    canvas.addEventListener("mousedown", startPainting);
-    canvas.addEventListener("mouseup", stopPainting);
-    canvas.addEventListener("mouseleave", stopPainting);
-    canvas.addEventListener("click", handleCanvasClick);
-    canvas.addEventListener("contextmenu", handleCM);
-}
-
 if (mode)
     mode.addEventListener("click", handleModeClick);
 
@@ -128,3 +120,27 @@ export const handleStrokedPath = ({
 export const handleFilled = ({
     color
 }) => fill(color);
+
+export const disableCanvas = () => {
+    canvas.removeEventListener("mousemove", onMouseMove);
+    canvas.removeEventListener("mousedown", startPainting);
+    canvas.removeEventListener("mouseup", stopPainting);
+    canvas.removeEventListener("mouseleave", stopPainting);
+    canvas.removeEventListener("click", handleCanvasClick);
+}
+
+export const enableCanvas = () => {
+    canvas.addEventListener("mousemove", onMouseMove);
+    canvas.addEventListener("mousedown", startPainting);
+    canvas.addEventListener("mouseup", stopPainting);
+    canvas.addEventListener("mouseleave", stopPainting);
+    canvas.addEventListener("click", handleCanvasClick);
+}
+
+export const hideControls = () => controls.style.opacity = 0;
+export const showControls = () => controls.style.opacity = 1;
+
+if (canvas) {
+    enableCanvas();
+    canvas.addEventListener("contextmenu", handleCM);
+}

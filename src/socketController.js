@@ -1,6 +1,13 @@
 import events from './events';
+import {
+    chooseWord
+} from "./words";
 
 let sockets = [];
+let inProgress = false;
+let word = null;
+
+const chooseLeader = () => sockets[Math.floor(Math.random() * sockets.length)];
 
 /**
  * 
@@ -14,6 +21,20 @@ const sockeetController = (socket, io) => {
         superBroadcast(events.playerUpdate, {
             sockets
         });
+    const startGame = () => {
+        if (inProgress === false) {
+            const leader = chooseLeader();
+            word = chooseWord();
+            inProgress = true;
+
+            // 1. 모든 사람에게 게임 시작 event emit
+            // 2. 리더에게 일방적으로 event emit
+            superBroadcast(events.startedGame);
+            io.to(leader.id).emit(events.notifyLeader, {
+                word
+            });
+        }
+    }
 
     socket.on(events.setNickname, ({
         nickname
@@ -28,6 +49,8 @@ const sockeetController = (socket, io) => {
             nickname
         });
         sendPlayerUpdate();
+        if (sockets.length > 1)
+            startGame();
     });
     socket.on(events.disconnect, () => {
         sockets = sockets.filter(s => s.id !== socket.id);
@@ -35,6 +58,9 @@ const sockeetController = (socket, io) => {
             nickname: socket.nickname
         });
         sendPlayerUpdate();
+        if (sockets.length < 2)
+            inProgress = false;
+        console.log("inProgress", inProgress);
     });
     socket.on(events.senndMsg, ({
             message
