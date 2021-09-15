@@ -12,8 +12,9 @@ const events = {
     fill: "fill",
     filled: "filled",
     playerUpdate: "playerUpdate",
+    notifyLeader: "notifyLeader",
     startedGame: "startedGame",
-    notifyLeader: "notifyLeader"
+    endedGame: "endedGame"
 }
 
 export default events;

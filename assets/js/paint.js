@@ -80,7 +80,6 @@ const handleModeClick = () => {
 }
 
 const fill = (color = null) => {
-    console.log(color);
     const currentColor = ctx.fillStyle;
     if (color !== null)
         ctx.fillStyle = color;
@@ -140,7 +139,9 @@ export const enableCanvas = () => {
 export const hideControls = () => controls.style.opacity = 0;
 export const showControls = () => controls.style.opacity = 1;
 
+export const resetCanvas = () => fill("#FFF");
+
 if (canvas) {
-    enableCanvas();
+    disableCanvas();
     canvas.addEventListener("contextmenu", handleCM);
 }

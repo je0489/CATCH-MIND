@@ -2,10 +2,12 @@ import {
     enableCanvas,
     disableCanvas,
     showControls,
-    hideControls
+    hideControls,
+    resetCanvas
 } from './paint';
 
 const board = document.getElementById("jsPBoard");
+const notif = document.getElementById("jsNotifs");
 
 const addPlayers = players => {
     board.innerHTML = "";
@@ -20,14 +22,29 @@ export const handlePlayerUpdate = ({
     sockets
 }) => addPlayers(sockets);
 
-export const handleStartedGame = () => {
-    disableCanvas();
-    hideControls();
-};
+const setNotifyWord = (msg = null) => {
+    notif.innerText = "";
+    if (msg !== null)
+        notif.innerText = msg;
+}
+
 export const handleNotifyLeader = ({
     word
 }) => {
     enableCanvas();
     showControls();
-    console.log("handleNotifyLeader", word)
+    setNotifyWord(`You are the leader, word: ${word}`);
 };
+
+export const handleStartedGame = () => {
+    disableCanvas();
+    hideControls();
+    setNotifyWord();
+};
+
+export const handleEndedGame = () => {
+    disableCanvas();
+    hideControls();
+    setNotifyWord("GAME END");
+    resetCanvas();
+}
