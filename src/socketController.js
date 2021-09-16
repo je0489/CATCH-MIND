@@ -7,8 +7,10 @@ let sockets = [];
 let inProgress = false;
 let word = null;
 let leader = null;
+let timeout = null;
 
 const chooseLeader = () => sockets[Math.floor(Math.random() * sockets.length)];
+const isNotAlone = () => sockets.length > 1;
 
 /**
  * 
@@ -35,6 +37,7 @@ const sockeetController = (socket, io) => {
                 io.to(leader.id).emit(events.notifyLeader, {
                     word
                 });
+                timeout = setTimeout(endGame, 10000);
             }, 2000);
         }
     }
@@ -50,6 +53,10 @@ const sockeetController = (socket, io) => {
     const endGame = () => {
         inProgress = false;
         superBroadcast(events.endedGame);
+        if (timeout !== null)
+            clearTimeout(timeout);
+        if (isNotAlone())
+            setTimeout(() => startGame(), 2000);
     }
 
     socket.on(events.setNickname, ({
@@ -65,7 +72,7 @@ const sockeetController = (socket, io) => {
             nickname
         });
         sendPlayerUpdate();
-        if (sockets.length > 1)
+        if (isNotAlone())
             startGame();
     });
     socket.on(events.disconnect, () => {
@@ -74,7 +81,7 @@ const sockeetController = (socket, io) => {
             nickname: socket.nickname
         });
         sendPlayerUpdate();
-        if (sockets.length < 2)
+        if (!isNotAlone())
             endGame();
         else if (leader && leader.id === sockets.id)
             endGame();
@@ -115,13 +122,12 @@ const sockeetController = (socket, io) => {
         })
     );
     socket.on(events.fill, ({
-        color
-    }) => {
-        console.log(color)
+            color
+        }) =>
         broadcast(events.filled, {
             color
         })
-    });
+    );
 }
 
 export default sockeetController;
