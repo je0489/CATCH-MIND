@@ -38,6 +38,15 @@ const sockeetController = (socket, io) => {
             }, 2000);
         }
     }
+    const addPoints = winnerID => {
+        sockets = sockets.map(s => {
+            if (winnerID == s.id)
+                s.points += 10;
+            return s;
+        });
+        sendPlayerUpdate();
+        endGame();
+    }
     const endGame = () => {
         inProgress = false;
         superBroadcast(events.endedGame);
@@ -71,13 +80,20 @@ const sockeetController = (socket, io) => {
             endGame();
     });
     socket.on(events.sendMsg, ({
-            message
-        }) =>
+        message
+    }) => {
         broadcast(events.newMsg, {
             message,
             nickname: socket.nickname
-        })
-    );
+        });
+        if (message === word) {
+            superBroadcast(events.newMsg, {
+                message: `Winner is ${socket.nickname}, word was: ${word}`,
+                nickname: "bot"
+            });
+            addPoints(socket.id);
+        }
+    });
     socket.on(events.beginPath, ({
             x,
             y

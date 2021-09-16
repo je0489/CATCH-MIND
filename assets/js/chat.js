@@ -8,7 +8,7 @@ const sendMsg = document.getElementById("jsSendMsg");
 const appendMsg = (text, nickname) => {
     const li = document.createElement("li");
     li.innerHTML = `
-        <span class="author ${nickname ? "other" : "self"}">${nickname || "you"}:</span> ${text}
+        <span class="author ${nickname ? (nickname !== "bot" ? "other" : nickname) : "self"}">${nickname || "you"}:</span> ${text}
     `;
     messages.appendChild(li);
 }
