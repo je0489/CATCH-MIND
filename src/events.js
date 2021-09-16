@@ -3,7 +3,7 @@ const events = {
     newUser: "newUser",
     disconnect: "disconnect",
     disconnected: "disconnected",
-    senndMsg: "senndMsg",
+    sendMsg: "sendMsg",
     newMsg: "newMsg",
     beginPath: "beginPath",
     strokePath: "strokePath",

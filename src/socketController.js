@@ -30,7 +30,6 @@ const sockeetController = (socket, io) => {
 
             // 1. 모든 사람에게 게임 시작 event emit
             // 2. 리더에게 일방적으로 event emit
-
             setTimeout(() => {
                 superBroadcast(events.startedGame);
                 io.to(leader.id).emit(events.notifyLeader, {
@@ -71,7 +70,7 @@ const sockeetController = (socket, io) => {
         else if (leader && leader.id === sockets.id)
             endGame();
     });
-    socket.on(events.senndMsg, ({
+    socket.on(events.sendMsg, ({
             message
         }) =>
         broadcast(events.newMsg, {
